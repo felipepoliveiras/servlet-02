@@ -1,8 +1,6 @@
 package br.senai.sp.informatica.servlet02.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,14 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.senai.sp.informatica.servlet02.dao.UsuarioDAO;
+import br.senai.sp.informatica.servlet02.models.Sexos;
 import br.senai.sp.informatica.servlet02.models.Usuario;
 
-@WebServlet(value = "/remover")
-public class UsuarioRemoverServlet extends ServletMelhorado{
+@WebServlet(value = "/editar")
+public class UsuarioEditarServlet extends ServletMelhorado{
 	
-	private UsuarioDAO usuarioDAO;
+private UsuarioDAO usuarioDAO;
 	
-	public UsuarioRemoverServlet() {
+	public UsuarioEditarServlet() {
 		usuarioDAO = new UsuarioDAO();
 	}
 	
@@ -34,21 +33,22 @@ public class UsuarioRemoverServlet extends ServletMelhorado{
 		try {
 			id = Integer.parseInt(idValue);
 		} catch (NumberFormatException e) {
-			redirect(resp, "listar?erro=1");
+			redirect(resp, "listar?erro=3");
 			return;
 		}
 		
-		Usuario usuarioRemovido = usuarioDAO.pegar(id);
+		Usuario usuarioEditado = usuarioDAO.pegar(id);
 		
 		//Se o usuário que será removido não existir
-		if(usuarioRemovido == null) {
-			redirect(resp, "listar?erro=2");
+		if(usuarioEditado == null) {
+			redirect(resp, "listar?erro=4");
 			return;
 		}
 		
-		//Remove o usuário e redireciona pra lista
-		usuarioDAO.remover(usuarioRemovido.getId());
-		redirect(resp, "listar");
+		//Exibe o form com os dados do usuário
+		req.setAttribute("usuario", usuarioEditado);
+		req.setAttribute("sexos", Sexos.values());
+		forward(req, resp, "form");
 		
 	}
 	

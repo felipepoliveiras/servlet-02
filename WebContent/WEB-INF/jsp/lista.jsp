@@ -10,6 +10,23 @@
 <title>Servlet 02</title>
 </head>
 <body>
+	<a href="${raiz}">Menu principal</a>
+	<c:if test="${not empty param.erro}">
+		<c:choose>
+			<c:when test="${param.erro eq 1}">
+				<p>Informe o ID para remover o usuário</p>
+			</c:when>
+			<c:when test="${param.erro eq 2}">
+				<p>O usuário com o ID informado não existe no banco de dados</p>
+			</c:when>
+			<c:when test="${param.erro eq 3}">
+				<p>Informe o ID para alterar o usuário</p>
+			</c:when>
+			<c:when test="${param.erro eq 4}">
+				<p>O usuário com o ID informado não existe no banco de dados</p>
+			</c:when>
+		</c:choose>
+	</c:if>
 	<h1>Lista de usuários</h1>
 	<table>
 		<thead>
@@ -29,8 +46,10 @@
 					<td>${usuario.id}</td>
 					<td>${usuario.nome}</td>
 					<td>${usuario.endereco}</td>
-					<td>${usuario.sexo}</td>
+					<td>${usuario.sexo.label}</td>
 					<td>${usuario.temFilhos}</td>
+					<td><a href="${raiz}editar?id=${usuario.id}">Editar</a></td>
+					<td><a href="${raiz}remover?id=${usuario.id}">Remover</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
